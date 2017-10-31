@@ -13,6 +13,7 @@ public class CsvUpdateReader {
     private int lastCheckedRow = 0;
     private File file = null;
     private List<String> headers;
+    private boolean isLogging = false;
 
     public CsvUpdateReader(String fileName) {
         file = new File(fileName);
@@ -29,14 +30,14 @@ public class CsvUpdateReader {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        System.out.println("Файл загружен. Обнаружено " + headers.size() + " заголовков, считано строк: " + lastCheckedRow + " размер: " + file.length());
+        if (isLogging) System.out.println("Файл загружен. Обнаружено " + headers.size() + " заголовков, считано строк: " + lastCheckedRow + " размер: " + file.length());
     }
 
 
     public List<HashMap<String, String>> read() {
         List<HashMap<String, String>> result = new ArrayList<>();
         if (file.length() != lastFileSize) {
-            System.out.println("Обнаружено изменение файла.");
+            if (isLogging) System.out.println("Обнаружено изменение файла.");
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 
                 // сбрасываем счётчик линии, если файл стал меньше
@@ -57,17 +58,24 @@ public class CsvUpdateReader {
                         }
                         result.add(hashMapFromLine);
                     } else {
-                        System.err.println("В строке [" + (lastCheckedRow + 1) + "] несовпадение количества аргументов. (" + valList.size() + " из " + headers.size() + ")");
+                        if (isLogging) System.err.println("В строке [" + (lastCheckedRow + 1) + "] несовпадение количества аргументов. (" + valList.size() + " из " + headers.size() + ")");
                     }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
             lastFileSize = file.length();
-            System.out.println("Считано " + result.size() + " строк.");
+            if (isLogging) System.out.println("Считано " + result.size() + " строк.");
         }
         return result;
     }
+    public void disableLog() {
+        isLogging = false;
+    }
+    public void enableLog() {
+        isLogging = true;
+    }
+
 
     private void skipReaded(BufferedReader reader) throws IOException {
         for (int currentRow = 0; currentRow < lastCheckedRow; currentRow++) {

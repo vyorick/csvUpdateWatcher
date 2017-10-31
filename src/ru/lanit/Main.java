@@ -6,29 +6,31 @@ import java.util.Map;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException{
-        CsvUpdateReader cur = new CsvUpdateReader("C:\\Users\\danilishe\\Documents\\csvIncReader\\src\\ru\\lanit\\example.csv");
+        CsvUpdateReader cur = new CsvUpdateReader("src\\ru\\lanit\\example.csv");
+        cur.enableLog();
+
         while (true) {
             List<HashMap<String, String>> data = cur.read();
             if (!data.isEmpty()) {
                 printData(data);
             } else {
-                System.out.println("No changes.\n");
+                System.out.println("Нет изменений.\n");
             }
 
-            System.out.println("Waiting...");
+            System.out.println("Ожидание...");
             Thread.sleep(15000);
-            System.out.println("Starting now!");
+            System.out.println("Сейчас будет начато считывание!");
             Thread.sleep(1500);
         }
     }
 
     private static void printData(List<HashMap<String, String>> data) {
-        System.out.println("-- start -------------------------------");
+        System.out.println("-- начало -------------------------------");
         for (HashMap<String, String> map : data) {
             for (Map.Entry<String, String> entry : map.entrySet()) {
                 System.out.println(entry.getKey() + " : " + entry.getValue());
             }
         }
-        System.out.println("--------------------------------- end --\n");
+        System.out.println("-------------------------------- конец --\n");
     }
 }

@@ -11,7 +11,7 @@ public class ParseLineTest {
 
     @BeforeEach
     void init() {
-        reader = new CsvUpdateReader("C:\\Users\\danilishe\\Documents\\csvIncReader\\src\\ru\\lanit\\example.csv");
+        reader = new CsvUpdateReader("C:\\Users\\danilishe\\Documents\\csvUpdateWatcher\\src\\ru\\lanit\\example.csv");
     }
     @Test
     public void stringTest() {
